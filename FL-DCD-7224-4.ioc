@@ -1,89 +1,114 @@
-# FL-DCD-7224-4 Digital Light Source Controller
-# STM32CubeMX Configuration for STM32G030C8T6
-#
-# NOTE: This is a text description of the CubeMX configuration.
-#       To generate the actual .ioc file, use STM32CubeMX GUI or
-#       use the STM32CubeIDE project provided separately.
-#
-# =====================================================================
-#  System Configuration
-# =====================================================================
-#
-# MCU: STM32G030C8Tx
-# Package: LQFP48
-# Clock: HSI 16MHz → PLL × 4 → 64 MHz SYSCLK
-# Flash: 0 wait states (64MHz is borderline, 1 WS may be needed)
-#   → Actually STM32G030 needs 1 WS at 64MHz, configured as FLASH_LATENCY_2
-#     for extra safety margin
-#
-# =====================================================================
-#  Pin Assignments (matching schematic)
-# =====================================================================
-#
-# PA0  - ADC1_IN0     (Over-current sense, analog)
-# PA4  - GPIO_INPUT   (TRIG1, trigger input)
-# PA5  - GPIO_INPUT   (TRIG2)
-# PA6  - GPIO_INPUT   (TRIG3)
-# PA7  - GPIO_INPUT   (TRIG4)
-# PA8  - TIM1_CH1     (PWM1 output, AF2)
-# PA9  - USART1_TX    (RS232 TX, AF1)
-# PA10 - USART1_RX    (RS232 RX, AF1)
-#
-# PB3  - TIM1_CH2     (PWM2 output, AF1)
-# PB4  - TIM1_CH3     (PWM3 output, AF1)
-# PB5  - TIM1_CH4     (PWM4 output, AF1)
-# PB6  - GPIO_INPUT   (KEY_L, Button CH, pull-up)
-# PB7  - GPIO_INPUT   (KEY_M, Button -, pull-up)
-# PB8  - GPIO_INPUT   (KEY_R, Button +, pull-up)
-# PB10 - GPIO_OUTPUT  (CH455G SCL, bit-bang)
-# PB11 - GPIO_OD      (CH455G SDA, bit-bang, open-drain)
-# PB12 - GPIO_OUTPUT  (LED_B, Power indicator)
-# PB13 - GPIO_OUTPUT  (LED_S, Mode1 indicator)
-# PB14 - GPIO_OUTPUT  (LED_P, Mode2 indicator)
-#
-# =====================================================================
-#  Peripheral Configuration
-# =====================================================================
-#
-# TIM1 (Advanced Timer):
-#   - Clock source: Internal (64 MHz APB1 × 1 timer multiplier)
-#   - Prescaler: 0
-#   - Counter period: 999 (for 64kHz) / 255 (250kHz) / 127 (500kHz)
-#   - Mode: PWM Generation CH1-CH4
-#   - Polarity: High
-#   - Auto-reload preload: Enable
-#
-# USART1:
-#   - Mode: Asynchronous
-#   - Baud rate: 115200
-#   - Word length: 8 bits
-#   - Stop bits: 1
-#   - Parity: None
-#   - NVIC: USART1 global interrupt (priority 1)
-#
-# ADC1:
-#   - IN0 (PA0)
-#   - 12-bit resolution
-#   - Software trigger
-#   - Sampling time: 39.5 cycles
-#
-# =====================================================================
-#  Build Instructions
-# =====================================================================
-#
-# Option 1: STM32CubeIDE
-#   - Import this project
-#   - Build with "Release" configuration
-#   - Flash via ST-Link
-#
-# Option 2: Makefile + arm-none-eabi-gcc
-#   - Install ARM toolchain
-#   - Place STM32CubeG0 HAL library in Drivers/
-#   - Run: make
-#   - Flash: openocd -f interface/stlink.cfg -f target/stm32g0x.cfg \
-#            -c "program build/fl-dcd-7224.elf verify reset exit"
-#
-# Option 3: PlatformIO
-#   - Create STM32G030C8 project
-#   - Copy Core/ files into src/
-#   - pio run -t upload
+#MicrocontrollerX : STM32G030C8Tx
+#PinX : 48
+#PackageX : LQFP48
+#Date : 2026-04-06
+#ProjectName : FL-DCD-7224-4
+#ProjectManager :
+#User :
+
+# *** GPIO ***
+PA0.GPIOParameters=GPIO_Label
+PA0.GPIO_Label=ADC0_CURRENT
+PA4.GPIOParameters=GPIO_Label,GPIO_PuPd
+PA4.GPIO_Label=TRIG1
+PA4.GPIO_PuPd=GPIO_PULLDOWN
+PA5.GPIOParameters=GPIO_Label,GPIO_PuPd
+PA5.GPIO_Label=TRIG2
+PA5.GPIO_PuPd=GPIO_PULLDOWN
+PA6.GPIOParameters=GPIO_Label,GPIO_PuPd
+PA6.GPIO_Label=TRIG3
+PA6.GPIO_PuPd=GPIO_PULLDOWN
+PA7.GPIOParameters=GPIO_Label,GPIO_PuPd
+PA7.GPIO_Label=TRIG4
+PA7.GPIO_PuPd=GPIO_PULLDOWN
+PB3.GPIOParameters=GPIO_Label
+PB3.GPIO_Label=PWM2
+PB4.GPIOParameters=GPIO_Label
+PB4.GPIO_Label=PWM3
+PB5.GPIOParameters=GPIO_Label
+PB5.GPIO_Label=PWM4
+PB6.GPIOParameters=GPIO_Label,GPIO_PuPd
+PB6.GPIO_Label=KEY_L
+PB6.GPIO_PuPd=GPIO_PULLUP
+PB7.GPIOParameters=GPIO_Label,GPIO_PuPd
+PB7.GPIO_Label=KEY_M
+PB7.GPIO_PuPd=GPIO_PULLUP
+PB8.GPIOParameters=GPIO_Label,GPIO_PuPd
+PB8.GPIO_Label=KEY_R
+PB8.GPIO_PuPd=GPIO_PULLUP
+PB10.GPIOParameters=GPIO_Label
+PB10.GPIO_Label=CH455_SCL
+PB11.GPIOParameters=GPIO_Label
+PB11.GPIO_Label=CH455_SDA
+PB12.GPIOParameters=GPIO_Label
+PB12.GPIO_Label=LED_B
+PB13.GPIOParameters=GPIO_Label
+PB13.GPIO_Label=LED_S
+PB14.GPIOParameters=GPIO_Label
+PB14.GPIO_Label=LED_P
+
+# *** Clock Configuration ***
+RCC.Mcu_ClockConfig.freq=64000000
+RCC.Mcu_ClockConfig.HSI_VALUE=16000000
+RCC.Mcu_ClockConfig.LSI_VALUE=32000
+RCC.Mcu_ClockConfig.HSE_VALUE=8000000
+RCC.Mcu_ClockConfig.LSE_VALUE=32768
+RCC.Mcu_ClockConfig.VDD_VALUE=3300
+RCC.Mcu_ClockConfig.TimVcoInputFreq=0
+RCC.Mcu_ClockConfig.SysclkSrc=PLL
+RCC.Mcu_ClockConfig.PLLSrc=HSI
+RCC.Mcu_ClockConfig.PLLM=RCC_PLLM_DIV1
+RCC.Mcu_ClockConfig.PLLN=8
+RCC.Mcu_ClockConfig.PLLP=RCC_PLLP_DIV2
+RCC.Mcu_ClockConfig.PLLQ=RCC_PLLQ_DIV2
+RCC.Mcu_ClockConfig.PLLR=RCC_PLLR_DIV2
+RCC.Mcu_ClockConfig.AHBFreq=64000000
+RCC.Mcu_ClockConfig.APB1Freq=64000000
+RCC.Mcu_ClockConfig.HCLKFreq=64000000
+
+# *** TIM1 ***
+TIM1.Mode=InternalClock
+TIM1.TIM_ClockDivision=TIM_CLOCKDIVISION_DIV1
+TIM1.TIM_CounterMode=TIM_COUNTERMODE_UP
+TIM1.TIM_Prescaler=0
+TIM1.TIM_Period=999
+TIM1.TIM_RepetitionCounter=0
+TIM1.TIM_AutoReloadPreload=TIM_AUTORELOAD_PRELOAD_ENABLE
+TIM1.Channel1=PWM_GENERATION_CH1
+TIM1.Channel2=PWM_GENERATION_CH2
+TIM1.Channel3=PWM_GENERATION_CH3
+TIM1.Channel4=PWM_GENERATION_CH4
+TIM1.Pulse_CH1=0
+TIM1.Pulse_CH2=0
+TIM1.Pulse_CH3=0
+TIM1.Pulse_CH4=0
+TIM1.OCMode=TIM_OCMODE_PWM1
+TIM1.OCPolarity=TIM_OCPOLARITY_HIGH
+
+# *** USART1 ***
+USART1.Mode=Asynchronous
+USART1.VirtualMode=VM_ASYNC
+USART1.BaudRate=115200
+USART1.WordLength=WORDLENGTH_8B
+USART1.StopBits=STOPBITS_1
+USART1.Parity=PARITY_NONE
+USART1.HwFlowCtl=HWCONTROL_NONE
+USART1.OverSampling=OVERSAMPLING_16
+
+# *** ADC1 ***
+ADC1.InjectedConvMode=regular-conversion-mode
+ADC1.ADC_SingleConvMode=ENABLE
+ADC1.ADC_ContinuousConvMode=DISABLE
+ADC1.ADC_DataAlign=ADC_DATAALIGN_RIGHT
+ADC1.ADC_ScanConvMode=DISABLE
+ADC1.ADC_Resolution=ADC_RESOLUTION_12B
+
+# *** Project Settings ***
+ProjectManager.TargetToolchain=STM32CubeIDE
+ProjectManager.ProjectBuildOrder=
+ProjectManager.MainLocation=Core/Src
+ProjectManager.FirmwarePackage=STM32Cube_FW_G0_V1.6.1
+ProjectManager.CompilerOptimize=6
+ProjectManager.CoupleFile=false
+ProjectManager.SupportSPL=false
+ProjectManager.DeviceId=STM32G030C8Tx

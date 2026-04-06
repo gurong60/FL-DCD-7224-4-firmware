@@ -5,7 +5,6 @@
 #
 #  Prerequisites:
 #    - arm-none-eabi-gcc toolchain
-#    - STM32CubeG0 HAL library (download from ST)
 #
 #  Usage:
 #    make            - Build firmware
@@ -39,24 +38,18 @@ C_SOURCES = \
 	Core/Src/params.c \
 	Core/Src/trigger.c \
 	Core/Src/overcurrent.c \
-	Core/Src/stm32g0xx_it.c
+	Core/Src/stm32g0xx_it.c \
+	Core/Src/system_stm32g0xx.c \
+	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal.c \
+	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_rcc.c \
+	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_gpio.c \
+	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_tim.c \
+	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_uart.c \
+	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_adc.c \
+	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_flash.c \
+	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_cortex.c
 
-# Add HAL sources if STM32CubeG0 is available:
-# C_SOURCES += \
-# 	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal.c \
-# 	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_rcc.c \
-# 	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_gpio.c \
-# 	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_uart.c \
-# 	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_tim.c \
-# 	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_tim_ex.c \
-# 	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_adc.c \
-# 	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_flash.c \
-# 	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_flash_ex.c \
-# 	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_cortex.c \
-# 	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_pwr.c \
-# 	Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_dma.c
-
-# Startup file (from CubeG0):
+# Startup assembly
 ASM_SOURCES = startup_stm32g030xx.s
 
 # ---- Include Paths ----
