@@ -1,0 +1,89 @@
+# FL-DCD-7224-4 Digital Light Source Controller
+# STM32CubeMX Configuration for STM32G030C8T6
+#
+# NOTE: This is a text description of the CubeMX configuration.
+#       To generate the actual .ioc file, use STM32CubeMX GUI or
+#       use the STM32CubeIDE project provided separately.
+#
+# =====================================================================
+#  System Configuration
+# =====================================================================
+#
+# MCU: STM32G030C8Tx
+# Package: LQFP48
+# Clock: HSI 16MHz → PLL × 4 → 64 MHz SYSCLK
+# Flash: 0 wait states (64MHz is borderline, 1 WS may be needed)
+#   → Actually STM32G030 needs 1 WS at 64MHz, configured as FLASH_LATENCY_2
+#     for extra safety margin
+#
+# =====================================================================
+#  Pin Assignments (matching schematic)
+# =====================================================================
+#
+# PA0  - ADC1_IN0     (Over-current sense, analog)
+# PA4  - GPIO_INPUT   (TRIG1, trigger input)
+# PA5  - GPIO_INPUT   (TRIG2)
+# PA6  - GPIO_INPUT   (TRIG3)
+# PA7  - GPIO_INPUT   (TRIG4)
+# PA8  - TIM1_CH1     (PWM1 output, AF2)
+# PA9  - USART1_TX    (RS232 TX, AF1)
+# PA10 - USART1_RX    (RS232 RX, AF1)
+#
+# PB3  - TIM1_CH2     (PWM2 output, AF1)
+# PB4  - TIM1_CH3     (PWM3 output, AF1)
+# PB5  - TIM1_CH4     (PWM4 output, AF1)
+# PB6  - GPIO_INPUT   (KEY_L, Button CH, pull-up)
+# PB7  - GPIO_INPUT   (KEY_M, Button -, pull-up)
+# PB8  - GPIO_INPUT   (KEY_R, Button +, pull-up)
+# PB10 - GPIO_OUTPUT  (CH455G SCL, bit-bang)
+# PB11 - GPIO_OD      (CH455G SDA, bit-bang, open-drain)
+# PB12 - GPIO_OUTPUT  (LED_B, Power indicator)
+# PB13 - GPIO_OUTPUT  (LED_S, Mode1 indicator)
+# PB14 - GPIO_OUTPUT  (LED_P, Mode2 indicator)
+#
+# =====================================================================
+#  Peripheral Configuration
+# =====================================================================
+#
+# TIM1 (Advanced Timer):
+#   - Clock source: Internal (64 MHz APB1 × 1 timer multiplier)
+#   - Prescaler: 0
+#   - Counter period: 999 (for 64kHz) / 255 (250kHz) / 127 (500kHz)
+#   - Mode: PWM Generation CH1-CH4
+#   - Polarity: High
+#   - Auto-reload preload: Enable
+#
+# USART1:
+#   - Mode: Asynchronous
+#   - Baud rate: 115200
+#   - Word length: 8 bits
+#   - Stop bits: 1
+#   - Parity: None
+#   - NVIC: USART1 global interrupt (priority 1)
+#
+# ADC1:
+#   - IN0 (PA0)
+#   - 12-bit resolution
+#   - Software trigger
+#   - Sampling time: 39.5 cycles
+#
+# =====================================================================
+#  Build Instructions
+# =====================================================================
+#
+# Option 1: STM32CubeIDE
+#   - Import this project
+#   - Build with "Release" configuration
+#   - Flash via ST-Link
+#
+# Option 2: Makefile + arm-none-eabi-gcc
+#   - Install ARM toolchain
+#   - Place STM32CubeG0 HAL library in Drivers/
+#   - Run: make
+#   - Flash: openocd -f interface/stlink.cfg -f target/stm32g0x.cfg \
+#            -c "program build/fl-dcd-7224.elf verify reset exit"
+#
+# Option 3: PlatformIO
+#   - Create STM32G030C8 project
+#   - Copy Core/ files into src/
+#   - pio run -t upload
